@@ -1,0 +1,18 @@
+{
+  "name": "velver-skillcheck-server",
+  "type": "module",
+
+  // TODO: Define scripts para ejecutar el servidor
+  "scripts": {
+    "dev": "...",   // ejecutar con watch
+    "start": "..."  // ejecutar normalmente
+  },
+
+  // TODO: Agrega dependencias necesarias para el servidor
+  "dependencies": {
+    "cors": "...",
+    "express": "...",
+    "morgan": "...",
+    "zod": "..."
+  }
+}

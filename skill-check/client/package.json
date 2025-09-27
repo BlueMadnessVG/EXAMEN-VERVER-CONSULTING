@@ -1,0 +1,26 @@
+{
+  "name": "velver-skillcheck-client",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+
+  // TODO: Define scripts para desarrollo, build y preview con Vite
+  "scripts": {
+    "dev": "...",
+    "build": "...",
+    "preview": "..."
+  },
+
+  // TODO: Agrega dependencias necesarias
+  "dependencies": {
+    "@tanstack/react-query": "...",
+    "react": "...",
+    "react-dom": "..."
+  },
+
+  // TODO: Agrega dependencias de desarrollo
+  "devDependencies": {
+    "@vitejs/plugin-react": "...",
+    "vite": "..."
+  }
+}
