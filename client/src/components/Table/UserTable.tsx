@@ -1,7 +1,6 @@
 // UsersTable.jsx
 import style from "./css/UserTable.module.css";
 import type { ReactNode } from "react";
-import { ButtonAddUser } from "./ButtonAddUser/ButtonAddUser";
 import { UserCard } from "./UserCard/UserCard";
 import type { User } from "../../schemas";
 
