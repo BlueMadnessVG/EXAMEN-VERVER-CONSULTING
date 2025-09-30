@@ -6,7 +6,6 @@ import {
   createUser,
   findUserByEmail,
   revokeUserToken,
-  validatePassword,
 } from "../models";
 import { message, safeParse } from "valibot";
 import { parseBody } from "../utils/";
@@ -62,18 +61,11 @@ export const authRoute = async (req: IncomingMessage, res: ServerResponse) => {
    */
   if (url === "/api/auth/register" && method === HttpMethod.POST) {
     const body = await parseBody(req);
-    const result = safeParse(authSchema, body);
 
-    if (result.issues) {
-      res.statusCode = 400;
-      res.end(JSON.stringify({ message: "Bad request", error: result.issues }));
-      return;
-    }
-
-    const { name, email, city, active, password } = body;
+    const { name, email, city } = body;
 
     try {
-      const user = await createUser(name, email, city, active, password);
+      const user = await createUser(name, email, city);
 
       res.statusCode = 201;
       res.end(JSON.stringify(user));
@@ -84,7 +76,7 @@ export const authRoute = async (req: IncomingMessage, res: ServerResponse) => {
         res.end(JSON.stringify({ message: "Bad request",error: err.message }));
       } else {
         res.statusCode = 500;
-        res.end(JSON.stringify({ message: "Internal server error" }));
+        res.end(JSON.stringify({ message: "Internal server error", error: err.message  }));
       }
       return;
     }
@@ -102,10 +94,10 @@ export const authRoute = async (req: IncomingMessage, res: ServerResponse) => {
       return;
     }
 
-    const { email, password } = body;
+    const { email } = body;
     const user = findUserByEmail(email);
 
-    if (!user || !(await validatePassword(user, password))) {
+    if (!user ) {
       res.statusCode = 401;
       res.end(JSON.stringify({ message: "Unauthorized" }));
       return;

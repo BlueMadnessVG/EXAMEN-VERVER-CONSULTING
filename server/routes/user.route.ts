@@ -5,7 +5,7 @@ import {
   filterUsers,
   HttpMethod,
   Role,
-  updateUser,
+  toggleUserState,
   type User,
 } from "../models";
 import { etagFor, parseBody } from "../utils";
@@ -48,6 +48,43 @@ import { authorizedRole, type AuthenticatedRequest } from "../middleware";
 export const userRoute = async (req: IncomingMessage, res: ServerResponse) => {
   const { method, url } = req;
 
+  /**
+   * Handles `GET /api/users` requests.
+   *
+   * Workflow:
+   * 1. Parses query parameters from the URL:
+   *    - `search` (string): case-insensitive filter applied to `name`, `email`, and `city`.
+   *    - `page` (number): page number, defaults to 1 (minimum 1).
+   *    - `limit` (number): number of items per page, defaults to 20 (maximum 100).
+   *
+   * 2. Applies filtering and pagination:
+   *    - Filters users using `filterUsers(search)`.
+   *    - Computes `total` results.
+   *    - Slices the filtered array based on `page` and `limit`.
+   *
+   * 3. Builds the response payload:
+   *    ```json
+   *    {
+   *      "page": number,
+   *      "limit": number,
+   *      "total": number,
+   *      "items": PublicUser[]
+   *    }
+   *    ```
+   *
+   * 4. Generates an `ETag` using `etagFor(payload)`:
+   *    - If the `If-None-Match` request header matches the generated ETag,
+   *      responds with `304 Not Modified` (no body).
+   *    - Otherwise, sets the `ETag` response header and returns the payload.
+   *
+   * Possible Responses:
+   * - `200 OK`: Returns the paginated and filtered users.
+   * - `304 Not Modified`: When client cache matches current data (ETag).
+   *
+   * @param req Incoming HTTP request object.
+   * @param res Outgoing HTTP response object.
+   * @returns void (sends HTTP response directly).
+   */
   if (url?.startsWith("/api/users") && method === HttpMethod.GET) {
     const parsedUrl = new URL(url, `http://${req.headers.host}`);
     const search = parsedUrl.searchParams.get("search")?.toLowerCase() ?? "";
@@ -77,24 +114,41 @@ export const userRoute = async (req: IncomingMessage, res: ServerResponse) => {
       return;
     }
 
-    res.setHeader("ETarg", etag);
+    res.setHeader("ETag", etag);
     res.statusCode = 200;
     res.end(JSON.stringify(payload));
     return;
   }
 
+  /**
+   * Handles `PATCH /api/users/:id` requests.
+   *
+   * Workflow:
+   * 1. Extracts the numeric user ID from the request URL.
+   * 2. Calls `toggleUserState(id)` to flip the `active` field of the user.
+   * 3. Returns the updated user if found, or `404 Not Found` if the user does not exist.
+   *
+   * Response Format:
+   * - `200 OK`:
+   *   ```json
+   *   {
+   *     "message": "User updated successfully",
+   *     "user": PublicUser
+   *   }
+   *   ```
+   * - `404 Not Found`:
+   *   ```json
+   *   { "error": "User not found" }
+   *   ```
+   *
+   * @param req Incoming HTTP request object.
+   * @param res Outgoing HTTP response object.
+   * @returns void (sends HTTP response directly).
+   */
   if (url?.startsWith("/api/users") && method === HttpMethod.PATCH) {
-/*     console.log(!(await authorizedRole(Role.ADMIN) (req as AuthenticatedRequest, res)));
-    if (!(await authorizedRole(Role.ADMIN) (req as AuthenticatedRequest, res))) {
-      res.statusCode = 403;
-      res.end(JSON.stringify({ error: "Forbidden" }));
-      return;
-    } */
-
     const id = parseInt(url.split("/").pop() as string, 10);
-    const body = await parseBody(req);
-    const user: User = body;
-    const updatedUser = updateUser(id, user);
+
+    const updatedUser = toggleUserState(id);
 
     if (!updatedUser) {
       res.statusCode = 404;

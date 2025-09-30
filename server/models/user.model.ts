@@ -35,19 +35,16 @@ const nameSchema = pipe(string(), minLength(2));
 const emailSchema = pipe(string(), email());
 const citySchema = pipe(string(), minLength(2));
 const activeSchema = pipe(boolean());
-const passwordSchema = pipe(string(), minLength(6));
 
 export const userSchema = object({
   name: nameSchema,
   email: emailSchema,
   city: citySchema,
   active: activeSchema,
-  password: passwordSchema,
 });
 
 export const authSchema = object({
   email: emailSchema,
-  password: passwordSchema,
 });
 
 export enum Role {
@@ -66,7 +63,7 @@ const users: Map<string, User> = new Map();
 let currentId = 0;
 
 export const toPublicUser = (user: User): PublicUser => {
-  const { password, ...rest } = user;
+  const { ...rest } = user;
   return rest;
 };
 
@@ -86,21 +83,18 @@ export const createUser = async (
   name: string,
   email: string,
   city: string,
-  active: boolean,
-  password: string
 ): Promise<PublicUser> => {
   if (users.has(email)) {
     throw new Error("EMAIL_EXIST");
   }
 
-  const hashedPassword = await hash(password, 10);
+  const hashedPassword = await hash("password123", 10);
   const newUser: User = {
     id: currentId++,
     name,
     email,
     city,
-    active,
-    password: hashedPassword,
+    active: true,
     role: Role.USER,
   };
 
@@ -149,15 +143,29 @@ export const filterUsers = (search: string): PublicUser[] => {
     return Array.from(users.values());
   }
 
-  return Array.from(users.values()).filter(
-    (u) =>
-      u.name.toLowerCase().includes(term) ||
-      u.email.toLowerCase().includes(term) ||
-      u.city.toLowerCase().includes(term)
-  ).map(toPublicUser);
+  return Array.from(users.values())
+    .filter(
+      (u) =>
+        u.name.toLowerCase().includes(term) ||
+        u.email.toLowerCase().includes(term) ||
+        u.city.toLowerCase().includes(term)
+    )
+    .map(toPublicUser);
 };
 
-export const updateUser = (id: number, updates: User): PublicUser | null => {
+/**
+ * Toggles the `active` state of a user by ID.
+ *
+ * - Finds the user with the given `id`.
+ * - If found, flips the boolean value of `active`.
+ * - Updates the user in the in-memory store (`users` map).
+ * - Returns the updated user in its public representation.
+ * - If no user is found, logs an error and returns `null`.
+ *
+ * @param id The numeric ID of the user to toggle.
+ * @returns {PublicUser | null} The updated public user if found, otherwise `null`.
+ */
+export const toggleUserState = (id: number): PublicUser | null => {
   const user = Array.from(users.values()).find((u) => u.id === id);
 
   if (!user) {
@@ -165,18 +173,30 @@ export const updateUser = (id: number, updates: User): PublicUser | null => {
     return null;
   }
 
-  const updatedUser = { ...user, ...updates };
+  const updatedUser = { ...user, active: !user.active };
 
   users.set(updatedUser.email, updatedUser);
   return toPublicUser(updatedUser);
 };
 
-export const validatePassword = async (
+/**
+ * Validates a plain-text password against a stored hashed password.
+ *
+ * Workflow:
+ * - Uses bcrypt `compare` to check whether the provided plain-text `password`
+ *   matches the user's hashed password stored in the model.
+ * - Returns `true` if the password is valid, otherwise `false`.
+ *
+ * @param {User} user - The user object containing the hashed password.
+ * @param {string} password - The plain-text password to validate.
+ * @returns {Promise<boolean>} Resolves to `true` if the password matches, `false` otherwise.
+ */
+/* export const validatePassword = async (
   user: User,
   password: string
 ): Promise<boolean> => {
   return compare(password, user.password);
-};
+}; */
 
 /**
  * Revoke Token
