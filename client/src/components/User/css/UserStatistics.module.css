@@ -1,0 +1,56 @@
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.75rem;
+  min-width: 80px;
+  position: relative;
+}
+
+/* Add subtle separators between stats */
+.statItem:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: -0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 30px;
+  background: var(--Color-BgHover);
+}
+
+.statLabel {
+  font-size: var(--Text-BodySmall);
+  color: var(--Color-TextDim);
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.statValue {
+  font-size: var(--Text-BodyLarge);
+  font-weight: 700;
+  color: var(--Color-TextMain);
+  line-height: 1;
+}
+
+.statSubtext {
+  font-size: var(--Text-BodySmall);
+  color: var(--Color-AccentGreen);
+  margin-top: 0.1rem;
+  font-weight: 600;
+}
+
+/* Special styling for org count to highlight it */
+.statItem.orgStat .statValue {
+  color: var(--Color-Primary);
+}
+
+.statItem.activeStat .statValue {
+  color: var(--Color-AccentGreen);
+}
+
+.statItem.totalStat .statValue {
+  color: var(--Color-TextMain);
+}

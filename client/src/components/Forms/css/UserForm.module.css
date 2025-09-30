@@ -1,0 +1,222 @@
+.userForm__Container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 40vw;
+  height: 100vh;
+  background: linear-gradient(90deg, #1e2329 0%, #252b33 100%, #262c34 100%);
+  padding: 2rem;
+  z-index: 1000;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.userForm__Header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--Color-BgHover, #313843);
+}
+
+.userForm__Title {
+  font-size: var(--Text-HeadingMedium, 22px);
+  font-weight: 600;
+  color: var(--Color-TextMain, #f3f3f3);
+  margin: 0;
+}
+
+.userForm__CloseButton {
+  background: none;
+  border: none;
+  color: var(--Color-TextDim, #76808c);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userForm__CloseButton:hover {
+  background-color: var(--Color-BgHover, #313843);
+  color: var(--Color-TextMain, #f3f3f3);
+}
+
+.userForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  flex: 1;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formLabel {
+  font-size: var(--Text-BodyMedium, 14px);
+  color: var(--Color-TextMain, #f3f3f3);
+  font-weight: 500;
+}
+
+.formLabel::after {
+  content: "*";
+  color: var(--Color-AccentRed, #cd5444);
+  margin-left: 0.25rem;
+  opacity: 0.8;
+}
+
+.formInput {
+  padding: 0.75rem 1rem;
+  background-color: var(--Color-BgMain, #0e141b);
+  border: 1px solid var(--Color-BgHover, #313843);
+  border-radius: 6px;
+  color: var(--Color-TextMain, #f3f3f3);
+  font-size: var(--Text-BodyMedium, 14px);
+  transition: all 0.2s ease;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: var(--Color-Primary, #66c0f4);
+  box-shadow: 0 0 0 2px rgba(102, 192, 244, 0.1);
+}
+
+.formInput::placeholder {
+  color: var(--Color-TextDim, #76808c);
+}
+
+.formInput:required:invalid {
+  border-color: var(--Color-AccentRed, #cd5444);
+}
+
+.formActions {
+  display: flex;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 2rem;
+}
+
+.formButton {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: var(--Text-BodyMedium, 14px);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+}
+
+.formButtonPrimary {
+  background-color: var(--Color-Primary, #66c0f4);
+  color: var(--Color-BgMain, #0e141b);
+}
+
+.formButtonPrimary:hover:not(:disabled) {
+  background-color: #5ab0e0;
+  transform: translateY(-1px);
+}
+
+.formButtonPrimary:disabled {
+  background-color: var(--Color-TextDim, #76808c);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.formButtonSecondary {
+  background-color: transparent;
+  color: var(--Color-TextDim, #76808c);
+  border: 1px solid var(--Color-BgHover, #313843);
+}
+
+.formButtonSecondary:hover {
+  background-color: var(--Color-BgHover, #313843);
+  color: var(--Color-TextMain, #f3f3f3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .userForm__Container {
+    width: 100vw;
+    padding: 1.5rem;
+  }
+
+  .formActions {
+    flex-direction: column;
+  }
+}
+
+/* Custom scrollbar for the form container */
+.userForm__Container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.userForm__Container::-webkit-scrollbar-track {
+  background: var(--Color-BgMain, #0e141b);
+}
+
+.userForm__Container::-webkit-scrollbar-thumb {
+  background: var(--Color-BgHover, #313843);
+  border-radius: 3px;
+}
+
+.userForm__Container::-webkit-scrollbar-thumb:hover {
+  background: var(--Color-TextDim, #76808c);
+}
+
+.formInputError {
+  border-color: var(--Color-AccentRed, #cd5444) !important;
+  box-shadow: 0 0 0 2px rgba(205, 84, 68, 0.1) !important;
+}
+
+.formError {
+  color: var(--Color-AccentRed, #cd5444);
+  font-size: var(--Text-BodySmall, 12px);
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.loadingText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.loadingText::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.formButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.formInput:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

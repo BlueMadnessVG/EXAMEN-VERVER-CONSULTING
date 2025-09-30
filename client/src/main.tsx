@@ -10,14 +10,24 @@
 // TODO: Renderiza la aplicación en el elemento con id 'root'
 // - Debe envolver <App /> dentro de <QueryClientProvider client={qc}>
 
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.tsx";
+import { ModalProvider } from "./context/modal.context.tsx";
+import { AxiosInterceptor } from "./interceptor/api.interceptor.ts";
+import { SnackbarProvider } from "notistack";
+import { SnackbarUtilitiesConfiguration } from "./utils/index.ts";
 
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+AxiosInterceptor();
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
-  </StrictMode>,
-)
+    <SnackbarProvider>
+      <SnackbarUtilitiesConfiguration />
+      <ModalProvider>
+        <App />
+      </ModalProvider>
+    </SnackbarProvider>
+  </StrictMode>
+);

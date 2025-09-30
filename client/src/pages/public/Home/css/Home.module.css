@@ -1,0 +1,160 @@
+/* Home.module.css */
+.homeContainer {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 1rem;
+}
+
+.homeContainer > header {
+  grid-row: 1;
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 1rem;
+  gap: 2rem;
+}
+
+.home__search {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.home__stats {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--Color-BgHighlight);
+  border-radius: 0.5rem;
+  border: 1px solid var(--Color-BgHover);
+  min-height: 60px;
+  padding: 0 0.2rem;
+  margin: 0 1rem;
+}
+
+.home__stats.loading {
+  opacity: 0.6;
+}
+
+.home__stats.loading .statValue {
+  color: var(--Color-TextDim);
+}
+
+.home__stats.empty {
+  justify-content: center;
+  color: var(--Color-TextDim);
+  font-style: italic;
+}
+
+@media (max-width: 1024px) {
+  .homeContainer > header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .home__search {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .home__stats {
+    width: 100%;
+    justify-content: space-around;
+    gap: 1rem;
+    border-radius: 0;
+  }
+  
+  .statItem {
+    min-width: 70px;
+    padding: 0.5rem;
+  }
+  
+  .statItem:not(:last-child)::after {
+    right: -0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .home__stats {
+    gap: 0.75rem;
+    padding: 0.5rem;
+  }
+  
+  .statItem {
+    min-width: 60px;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .statLabel {
+    font-size: var(--Text-BodySmall);
+  }
+  
+  .statValue {
+    font-size: var(--Text-BodyMedium);
+  }
+  
+  .statSubtext {
+    font-size: var(--Text-BodySmall);
+  }
+  
+  .statItem:not(:last-child)::after {
+    right: -0.375rem;
+    height: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home__stats {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .statItem {
+    min-width: 55px;
+    flex: 1;
+  }
+  
+  .statItem:not(:last-child)::after {
+    display: none;
+  }
+}
+
+/* Keep your existing pagination styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1rem;
+}
+
+.pagination button {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--Color-Primary);
+  background: transparent;
+  color: var(--Color-Primary);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: var(--Color-Primary);
+  color: var(--Color-BgMain);
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  color: var(--Color-TextDim);
+  font-size: var(--Text-BodySmall);
+}

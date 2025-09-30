@@ -1,0 +1,23 @@
+.buttonAddUser {
+    display: flex;
+    width: 100%;
+    height: 220px;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 0.3rem;
+    border: 3px solid var(--Color-BgMain);
+    background-color: var(--Color-BgMain);
+    cursor: pointer;
+
+    color: var(--Color-TextMain);
+    font-size: var(--Text-BodyLarge);
+    font-weight: 700;
+}
+
+.buttonAddUser:hover {
+    border: 3px solid var(--Color-AccentGreen);
+    font-size: var(--Text-HeadingSmall);
+    color: var(--Color-AccentGreen);
+    transition: all 0.3s ease;
+}

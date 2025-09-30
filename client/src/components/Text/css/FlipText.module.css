@@ -1,0 +1,34 @@
+.flipText {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.flipText__inner {
+    position: relative;
+    padding: 0.25rem;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 1rem;
+    line-height: 0.75;
+}
+
+.flipText__layer {
+    position: absolute;
+    inset: 0px;
+    padding-left: 0.25rem;
+}
+
+.flipText__content {
+    display: inline-block;
+}
+
+.activeState {
+    color: var(--Color-AccentGreen);
+    font-weight: bold;
+}
+.inactiveState {
+    color: var(--Color-Primary);
+}
